@@ -13,66 +13,6 @@ from typing import Any, Dict, List, Optional, Tuple
 import xml.etree.ElementTree as ET
 import streamlit as st
 
-# Sayfa ayarını EN BAŞA koyun
-st.set_page_config(page_title="AICONTEXT Document Analyzer", page_icon="🚀", layout="wide")
-
-# --- KESİN ÇÖZÜM: Fullscreen ve Footer Yok Edici ---
-hide_streamlit_style = """
-<style>
-    /* 1. Alt Çubuğu (Toolbar) ve "Deploy" butonunu yok et */
-    .stAppToolbar {visibility: hidden !important; display: none !important; height: 0px !important;}
-    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important; height: 0px !important;}
-    
-    /* 2. Fullscreen Butonunu (Sağ üstteki) yok et */
-    button[title="View fullscreen"] {visibility: hidden !important; display: none !important;}
-    
-    /* 3. Header ve Hamburger Menüsünü yok et */
-    header {visibility: hidden !important; display: none !important;}
-    #MainMenu {visibility: hidden !important; display: none !important;}
-    .stAppHeader {visibility: hidden !important; display: none !important;}
-    
-    /* 4. Alt kısımdaki "Made with Streamlit" yazısını yok et */
-    footer {visibility: hidden !important; display: none !important; height: 0px !important;}
-    .stFooter {visibility: hidden !important; display: none !important;}
-    
-    /* 5. Gömülü moddaki alt çubuğu (viewerBadge) yok et */
-    .viewerBadge_container__1QSob {display: none !important;}
-    .styles_viewerBadge__1yB5_ {display: none !important;}
-    div[class*="viewerBadge"] {display: none !important;}
-    
-    /* 6. Uygulamanın üstündeki boşluğu kapat */
-    .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
-    }
-</style>
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-# ... Kodunuzun geri kalanı buradan devam etsin ...
-
-### Bu kodu uygulayıp GitHub'a gönderdiğinizde, Streamlit uygulamanızın altında veya üstünde tıklanacak hiçbir buton kalmayacaktır.
-
-### 2. React Tarafında "Kullanıcı Kontrolü" (Güvenlik Ağı)
-
-##Eğer olur da bir şekilde kullanıcı o butona basarsa veya linki kopyalayıp başka sekmede açarsa, uygulamanın çalışmasını engellemeliyiz.
-
-##Bunun için Streamlit (Python) kodunuza şu mantığı ekleyin:
-
-##**Mantık:** "Eğer bu uygulama bir `iframe` içinde (portalda) çalışmıyorsa veya URL'de geçerli bir `uid` yoksa, çalışmayı durdur."
-
-##python
-# app_ui.py dosyasının başlarına ekleyin
-
-# URL parametrelerini al
-query_params = st.query_params
-user_id = query_params.get("uid", None)
-
-# Eğer UID yoksa (yani portal üzerinden gelmemişse)
-if not user_id:
-    st.error("⛔ Yetkisiz Erişim! Bu uygulamaya sadece Anova Portal üzerinden erişebilirsiniz.")
-    st.stop() # Uygulamayı tamamen durdur, hiçbir şey gösterme.
-
 # Backend service + models (same folder imports)
 from service_facade import TermEngineService
 from models import UniversalTerm
